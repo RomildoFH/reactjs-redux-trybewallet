@@ -63,7 +63,7 @@ class WalletForm extends Component {
     return (
       <form>
         <label htmlFor="value-input">
-          value
+          Valor
           { ' ' }
           <input
             name="value"
