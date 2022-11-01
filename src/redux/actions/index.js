@@ -5,6 +5,10 @@ export const REQUEST_CURRENCIES_STARTED = 'GET_CURRENCIES_STARTED';
 
 export const RECEIVE_CURRENCIES = 'RECEIVE_CURRENCIES';
 
+export const EXPENSE_ENTRY = 'EXPENSE_ENTRY';
+
+export const REQUEST_EXCHANGE = 'REQUEST_EXCHANGE';
+
 const currenciesUrl = 'https://economia.awesomeapi.com.br/json/all';
 
 export const actionEmail = (value) => ({
@@ -21,15 +25,6 @@ export const receiveCurrencies = (currencies) => ({
   currencies,
 });
 
-// const fetchMoedas = async () => {
-//   const response = await fetch(currenciesUrl);
-//   const data = await response.json();
-//   console.log(data);
-//   const keys = Object.keys(data);
-//   console.log(keys);
-//   return (keys);
-// };
-
 export function fetchCurrencies() {
   return (dispatch) => {
     dispatch(requestCurrencies());
@@ -40,9 +35,28 @@ export function fetchCurrencies() {
   };
 }
 
-// export function fetchCurrencies() {
-//   return (dispatch) => {
-//     dispatch(requestCurrencies());
-//     return dispatch(receiveCurrencies(fetchMoedas()));
-//   };
-// }
+export const requestExchagne = () => ({
+  type: REQUEST_EXCHANGE,
+});
+
+export const expenseEntry = (expense, exchange) => ({
+  type: EXPENSE_ENTRY,
+  expenses: {
+    id: expense.id,
+    value: expense.value,
+    description: expense.description,
+    currency: expense.currency,
+    method: expense.method,
+    tag: expense.tag,
+    exchangeRates: exchange,
+  },
+});
+
+export function fetchExpense(expense) {
+  return (dispatch) => {
+    dispatch(requestExchagne());
+    return fetch(currenciesUrl)
+      .then((response) => response.json())
+      .then((currencies) => dispatch(expenseEntry(expense, currencies)));
+  };
+}

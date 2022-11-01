@@ -1,6 +1,8 @@
 // Esse reducer será responsável por tratar o todas as informações relacionadas as despesas
-// import { REQUEST_CURRENCIES_STARTED } from '../actions/index';
-import { RECEIVE_CURRENCIES } from '../actions/index';
+import {
+  RECEIVE_CURRENCIES,
+  EXPENSE_ENTRY,
+} from '../actions/index';
 
 const INITIAL_STATE = {
   currencies: [], // array de string
@@ -9,16 +11,21 @@ const INITIAL_STATE = {
   idToEdit: 0, // valor numérico que armazena o id da despesa que esta sendo editada
 };
 
-const user = (state = INITIAL_STATE, action) => {
+const wallet = (state = INITIAL_STATE, action) => {
   switch (action.type) {
   case RECEIVE_CURRENCIES:
     return ({
       ...state,
       currencies: action.currencies,
     });
+  case EXPENSE_ENTRY:
+    return ({
+      ...state,
+      expenses: [...state.expenses, action.expenses],
+    });
   default:
     return state;
   }
 };
 
-export default user;
+export default wallet;
