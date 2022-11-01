@@ -1,4 +1,7 @@
 // Esse reducer será responsável por tratar o todas as informações relacionadas as despesas
+// import { REQUEST_CURRENCIES_STARTED } from '../actions/index';
+import { RECEIVE_CURRENCIES } from '../actions/index';
+
 const INITIAL_STATE = {
   currencies: [], // array de string
   expenses: [], // array de objetos, com cada objeto tendo as chaves id, value, currency, method, tag, description e exchangeRates
@@ -8,6 +11,11 @@ const INITIAL_STATE = {
 
 const user = (state = INITIAL_STATE, action) => {
   switch (action.type) {
+  case RECEIVE_CURRENCIES:
+    return ({
+      ...state,
+      currencies: action.currencies,
+    });
   default:
     return state;
   }
