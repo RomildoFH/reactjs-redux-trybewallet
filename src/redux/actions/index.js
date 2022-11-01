@@ -25,7 +25,9 @@ export const receiveCurrencies = (currencies) => ({
 //   const response = await fetch(currenciesUrl);
 //   const data = await response.json();
 //   console.log(data);
-//   return Object.keys(data);
+//   const keys = Object.keys(data);
+//   console.log(keys);
+//   return (keys);
 // };
 
 export function fetchCurrencies() {
@@ -33,13 +35,14 @@ export function fetchCurrencies() {
     dispatch(requestCurrencies());
     return fetch(currenciesUrl)
       .then((response) => response.json())
-      .then((currencies) => dispatch(receiveCurrencies(Object.keys(currencies))));
+      .then((currencies) => dispatch(receiveCurrencies(Object.keys(currencies)
+        .filter((currencie) => (currencie !== 'USDT')))));
   };
 }
 
 // export function fetchCurrencies() {
 //   return (dispatch) => {
 //     dispatch(requestCurrencies());
-//     return dispatch(receiveCurrencies((fetchMoedas)));
+//     return dispatch(receiveCurrencies(fetchMoedas()));
 //   };
 // }
