@@ -25,7 +25,7 @@ class Header extends Component {
         <span
           data-testid="total-field"
         >
-          { expenses.length > 0 ? this.getTotalInGlobalState() : 0.00 }
+          { expenses.length > 0 ? this.getTotalInGlobalState() : 0.00.toFixed(2) }
         </span>
         <span data-testid="header-currency-field">BRL</span>
       </div>

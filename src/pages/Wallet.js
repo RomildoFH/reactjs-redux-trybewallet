@@ -3,8 +3,14 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Header from '../components/Header';
 import WalletForm from '../components/WalletForm';
+import { deleteExpense } from '../redux/actions/index';
 
 class Wallet extends React.Component {
+  deleteHandleClick = (expenseId) => {
+    const { dispatch } = this.props;
+    dispatch(deleteExpense(expenseId));
+  };
+
   makeTable = () => {
     const { expenses } = this.props;
     // return expenses.map((expense, index) => <p key={ index }>{ expense.currency }</p>);
@@ -68,7 +74,25 @@ class Wallet extends React.Component {
                 </td>
                 <td>
                   <button type="button">Editar</button>
-                  <button type="button">Excluir</button>
+                  <button
+                    type="button"
+                    onClick={ () => this.deleteHandleClick(expense.id) }
+                    data-testid="delete-btn"
+                    // id={ `delete-btn-${expense.id}` }
+                  >
+                    Excluir
+                  </button>
+                  {/* {
+                    expenses.length > 1
+                    && <button
+                      type="button"
+                      onClick={ () => this.deleteHandleClick(expense.id) }
+                      data-testid="delete-btn"
+                      id={ `delete-btn-${expense.id}` }
+                    >
+                      Excluir
+                    </button>
+                  } */}
                 </td>
               </tr>
             ))
@@ -93,6 +117,7 @@ class Wallet extends React.Component {
 
 Wallet.propTypes = {
   expenses: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  dispatch: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (globalState) => ({

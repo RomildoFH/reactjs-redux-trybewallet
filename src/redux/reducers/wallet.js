@@ -2,6 +2,7 @@
 import {
   RECEIVE_CURRENCIES,
   EXPENSE_ENTRY,
+  DELETE_EXPENSE,
 } from '../actions/index';
 
 const INITIAL_STATE = {
@@ -22,6 +23,15 @@ const wallet = (state = INITIAL_STATE, action) => {
     return ({
       ...state,
       expenses: [...state.expenses, action.expenses],
+    });
+  case DELETE_EXPENSE:
+    console.log(action.expenseId);
+    return ({
+      ...state,
+      expenses: (
+        state.expenses.length === 1 ? INITIAL_STATE.expenses
+          : state.expenses.filter((element) => (element.id !== action.expenseId))
+      ),
     });
   default:
     return state;
