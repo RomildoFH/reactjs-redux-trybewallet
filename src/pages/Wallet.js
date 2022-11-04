@@ -13,6 +13,7 @@ class Wallet extends React.Component {
 
   makeTable = () => {
     const { expenses } = this.props;
+    console.log(expenses);
     // return expenses.map((expense, index) => <p key={ index }>{ expense.currency }</p>);
     return (
       <table>
@@ -49,7 +50,7 @@ class Wallet extends React.Component {
         </thead>
         <tbody>
           {
-            expenses.map((expense) => (
+            expenses.length > 0 && expenses.map((expense) => (
               <tr key={ expense.id }>
                 <td>{ expense.description }</td>
                 <td>{ expense.tag }</td>
@@ -57,6 +58,7 @@ class Wallet extends React.Component {
                 <td>{ Number(expense.value).toFixed(2) }</td>
                 <td>{ expense.currency }</td>
                 <td>{ expense.exchangeRates[expense.currency].name }</td>
+                {/* <td>{ console.log(expense.exchangeRates) }</td> */}
                 <td>
                   {
                     Number(expense.exchangeRates[expense.currency]
