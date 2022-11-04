@@ -11,6 +11,8 @@ export const REQUEST_EXCHANGE = 'REQUEST_EXCHANGE';
 
 export const DELETE_EXPENSE = 'DELETE_EXPENSE';
 
+export const EDIT_EXPENSE = 'EDIT_EXPENSE';
+
 const currenciesUrl = 'https://economia.awesomeapi.com.br/json/all';
 
 export const actionEmail = (value) => ({
@@ -66,4 +68,10 @@ export function fetchExpense(expense) {
 export const deleteExpense = (expenseId) => ({
   type: DELETE_EXPENSE,
   expenseId,
+});
+
+export const editExpense = (expenseId) => ({
+  type: EDIT_EXPENSE,
+  editor: true,
+  idToEdit: expenseId,
 });

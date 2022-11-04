@@ -23,6 +23,13 @@ class WalletForm extends Component {
     dispatch(fetchCurrencies());
   }
 
+  componentDidUpdate(prevProps) {
+    const { editor, idToEdit } = this.props;
+    if (editor && !prevProps.editor) {
+      this.handleEdit();
+    }
+  }
+
   handleChange({ target }) {
     const { name } = target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
@@ -54,6 +61,20 @@ class WalletForm extends Component {
       method: 'Dinheiro',
       tag: 'Alimentação',
     });
+  };
+
+  handleEdit = () => {
+    const { expenses, editor, idToEdit } = this.props;
+    if (editor) {
+      this.setState({
+        id: idToEdit,
+        value: expenses[idToEdit].value,
+        description: expenses[idToEdit].description,
+        currency: expenses[idToEdit].currency,
+        method: expenses[idToEdit].method,
+        tag: expenses[idToEdit].tag,
+      });
+    }
   };
 
   render() {
@@ -149,10 +170,16 @@ class WalletForm extends Component {
 WalletForm.propTypes = {
   dispatch: PropTypes.func.isRequired,
   currencies: PropTypes.arrayOf(PropTypes.string).isRequired,
+  expenses: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  editor: PropTypes.bool.isRequired,
+  idToEdit: PropTypes.number.isRequired,
 };
 
 const mapStateToProps = (globalState) => ({
   currencies: globalState.wallet.currencies,
+  expenses: globalState.wallet.expenses,
+  editor: globalState.wallet.editor,
+  idToEdit: globalState.wallet.idToEdit,
 });
 
 export default connect(mapStateToProps)(WalletForm);

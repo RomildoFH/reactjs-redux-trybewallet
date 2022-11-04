@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Header from '../components/Header';
 import WalletForm from '../components/WalletForm';
-import { deleteExpense } from '../redux/actions/index';
+import { deleteExpense, editExpense } from '../redux/actions/index';
 
 class Wallet extends React.Component {
   deleteHandleClick = (expenseId) => {
@@ -11,10 +11,13 @@ class Wallet extends React.Component {
     dispatch(deleteExpense(expenseId));
   };
 
+  editHandleClick = (expenseId) => {
+    const { dispatch } = this.props;
+    dispatch(editExpense(expenseId));
+  };
+
   makeTable = () => {
     const { expenses } = this.props;
-    console.log(expenses);
-    // return expenses.map((expense, index) => <p key={ index }>{ expense.currency }</p>);
     return (
       <table>
         <thead>
@@ -58,7 +61,6 @@ class Wallet extends React.Component {
                 <td>{ Number(expense.value).toFixed(2) }</td>
                 <td>{ expense.currency }</td>
                 <td>{ expense.exchangeRates[expense.currency].name }</td>
-                {/* <td>{ console.log(expense.exchangeRates) }</td> */}
                 <td>
                   {
                     Number(expense.exchangeRates[expense.currency]
@@ -75,26 +77,20 @@ class Wallet extends React.Component {
                   }
                 </td>
                 <td>
-                  <button type="button">Editar</button>
+                  <button
+                    type="button"
+                    onClick={ () => this.editHandleClick(expense.id) }
+                    data-testid="edit-btn"
+                  >
+                    Editar
+                  </button>
                   <button
                     type="button"
                     onClick={ () => this.deleteHandleClick(expense.id) }
                     data-testid="delete-btn"
-                    // id={ `delete-btn-${expense.id}` }
                   >
                     Excluir
                   </button>
-                  {/* {
-                    expenses.length > 1
-                    && <button
-                      type="button"
-                      onClick={ () => this.deleteHandleClick(expense.id) }
-                      data-testid="delete-btn"
-                      id={ `delete-btn-${expense.id}` }
-                    >
-                      Excluir
-                    </button>
-                  } */}
                 </td>
               </tr>
             ))
@@ -105,12 +101,10 @@ class Wallet extends React.Component {
   };
 
   render() {
-    // const { expenses } = this.props;
     return (
       <div>
         <Header />
         <WalletForm />
-        {/* { expenses.length > 0 ? this.makeTable() : null } */}
         { this.makeTable() }
       </div>
     );
