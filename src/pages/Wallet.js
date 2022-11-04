@@ -50,7 +50,7 @@ class Wallet extends React.Component {
         <tbody>
           {
             expenses.map((expense, index) => (
-              <tr key={ index }>
+              <tr key={ expense.id }>
                 <td>{ expense.description }</td>
                 <td>{ expense.tag }</td>
                 <td>{ expense.method }</td>
