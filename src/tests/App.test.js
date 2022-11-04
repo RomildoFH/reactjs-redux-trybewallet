@@ -103,6 +103,9 @@ describe('Página de carteira', () => {
     global.fetch.mockClear();
   });
 
+  const valueInput = 'value-input';
+  const descriptionInput = 'description-input';
+
   test('1- Ao carregar a página da carteira, ela contem informações do usuário', () => {
     renderWithRouterAndRedux(<App />);
 
@@ -154,8 +157,8 @@ describe('Página de carteira', () => {
     userEvent.type(inputPassword, validPassword);
     userEvent.click(entrarBtn);
 
-    const inputValue = screen.getByTestId('value-input');
-    const inputDescription = screen.getByTestId('description-input');
+    const inputValue = screen.getByTestId(valueInput);
+    const inputDescription = screen.getByTestId(descriptionInput);
     const inputCurrency = screen.getByTestId('currency-input');
     const inputMethod = screen.getByTestId('method-input');
     const inputTag = screen.getByTestId('tag-input');
@@ -186,21 +189,21 @@ describe('Página de carteira', () => {
 
     expect(usdOption[0]).toBeInTheDocument();
 
-    const inputValue = screen.getByTestId('value-input');
-    const inputDescription = screen.getByTestId('description-input');
-    const inputCurrency = screen.getByTestId('currency-input');
-    const inputMethod = screen.getByTestId('method-input');
-    const inputTag = screen.getByTestId('tag-input');
-    const adicionarBtn = screen.getByRole('button', { name: 'Adicionar despesa' });
+    const inputValue = screen.getByTestId(valueInput);
+    const inputDescription = screen.getByTestId(descriptionInput);
+    // const inputCurrency = screen.getByTestId('currency-input');
+    // const inputMethod = screen.getByTestId('method-input');
+    // const inputTag = screen.getByTestId('tag-input');
+    // const adicionarBtn = screen.getByRole('button', { name: 'Adicionar despesa' });
 
     userEvent.type(inputValue, '10');
     userEvent.type(inputDescription, 'cinema');
-    userEvent.click(adicionarBtn);
+    // userEvent.click(adicionarBtn);
 
-    // const inputValue2 = screen.getByTestId('value-input');
-    // const inputDescription2 = screen.getByTestId('description-input');
+    const inputValue2 = screen.getByTestId(valueInput);
+    const inputDescription2 = screen.getByTestId(descriptionInput);
 
-    // expect(inputValue2.value).toBe('10');
-    // expect(inputDescription2.value).toBe('cinema');
+    expect(inputValue2.value).toBe('10');
+    expect(inputDescription2.value).toBe('cinema');
   });
 });
