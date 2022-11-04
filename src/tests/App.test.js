@@ -191,9 +191,6 @@ describe('Página de carteira', () => {
 
     const inputValue = screen.getByTestId(valueInput);
     const inputDescription = screen.getByTestId(descriptionInput);
-    // const inputCurrency = screen.getByTestId('currency-input');
-    // const inputMethod = screen.getByTestId('method-input');
-    // const inputTag = screen.getByTestId('tag-input');
     // const adicionarBtn = screen.getByRole('button', { name: 'Adicionar despesa' });
 
     userEvent.type(inputValue, '10');
