@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { fetchCurrencies, fetchExpense } from '../redux/actions/index';
+import { fetchCurrencies, fetchExpense, updateExpense } from '../redux/actions/index';
 
 class WalletForm extends Component {
   constructor() {
@@ -24,7 +24,7 @@ class WalletForm extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { editor, idToEdit } = this.props;
+    const { editor } = this.props;
     if (editor && !prevProps.editor) {
       this.handleEdit();
     }
@@ -77,8 +77,32 @@ class WalletForm extends Component {
     }
   };
 
+  handleUpdateExpense = () => {
+    const { id, value, description, currency, method, tag } = this.state;
+    const { dispatch, expenses, idToEdit } = this.props;
+    this.setState({
+      id: expenses.length - 1,
+    });
+    const updatedExpense = {
+      id,
+      value,
+      description,
+      currency,
+      method,
+      tag,
+    };
+    dispatch(updateExpense(idToEdit, updatedExpense));
+    this.setState({
+      value: '',
+      description: '',
+      currency: 'USD',
+      method: 'Dinheiro',
+      tag: 'Alimentação',
+    });
+  };
+
   render() {
-    const { currencies } = this.props;
+    const { currencies, editor } = this.props;
     const { value, description, currency, method, tag } = this.state;
     const renderCurrencies = currencies;
     return (
@@ -156,12 +180,18 @@ class WalletForm extends Component {
             <option>Saúde</option>
           </select>
         </label>
-        <button
-          type="button"
-          onClick={ this.handleClick }
-        >
-          Adicionar despesa
-        </button>
+        {
+          !editor
+            ? (
+              <button
+                type="button"
+                onClick={ this.handleClick }
+              >
+                Adicionar despesa
+              </button>
+            )
+            : <button type="button" onClick={ this.handleUpdateExpense }>Editar despesa</button>
+        }
       </form>
     );
   }

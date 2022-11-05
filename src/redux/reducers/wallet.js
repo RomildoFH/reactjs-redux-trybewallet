@@ -4,6 +4,7 @@ import {
   EXPENSE_ENTRY,
   DELETE_EXPENSE,
   EDIT_EXPENSE,
+  UPDATE_EXPENSE,
 } from '../actions/index';
 
 const INITIAL_STATE = {
@@ -12,6 +13,20 @@ const INITIAL_STATE = {
   editor: false, // valor booleano que indica de uma despesa está sendo editada
   idToEdit: 0, // valor numérico que armazena o id da despesa que esta sendo editada
 };
+
+const expenseEdit = (updatedExpense, expenses) => expenses.map((expense) => {
+  if (updatedExpense.id === expense.id) {
+    return {
+      ...expense,
+      value: updatedExpense.value,
+      description: updatedExpense.description,
+      currency: updatedExpense.currency,
+      method: updatedExpense.method,
+      tag: updatedExpense.tag,
+    };
+  }
+  return expense;
+});
 
 const wallet = (state = INITIAL_STATE, action) => {
   switch (action.type) {
@@ -38,6 +53,13 @@ const wallet = (state = INITIAL_STATE, action) => {
       ...state,
       editor: true,
       idToEdit: action.idToEdit,
+    });
+  case UPDATE_EXPENSE:
+    return ({
+      ...state,
+      editor: action.editor,
+      idToEdit: action.idToEdit,
+      expenses: expenseEdit(action.expenses, state.expenses),
     });
   default:
     return state;

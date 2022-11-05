@@ -13,6 +13,8 @@ export const DELETE_EXPENSE = 'DELETE_EXPENSE';
 
 export const EDIT_EXPENSE = 'EDIT_EXPENSE';
 
+export const UPDATE_EXPENSE = 'UPDATE_EXPENSE';
+
 const currenciesUrl = 'https://economia.awesomeapi.com.br/json/all';
 
 export const actionEmail = (value) => ({
@@ -74,4 +76,18 @@ export const editExpense = (expenseId) => ({
   type: EDIT_EXPENSE,
   editor: true,
   idToEdit: expenseId,
+});
+
+export const updateExpense = (expenseId, expense) => ({
+  type: UPDATE_EXPENSE,
+  editor: false,
+  idToEdit: expenseId,
+  expenses: {
+    id: expense.id,
+    value: expense.value,
+    description: expense.description,
+    currency: expense.currency,
+    method: expense.method,
+    tag: expense.tag,
+  },
 });
