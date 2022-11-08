@@ -101,9 +101,13 @@ class Wallet extends React.Component {
   };
 
   render() {
+    const { editor } = this.props;
     return (
       <div>
         <Header />
+        {
+          editor && (<p>**Editando despesa**</p>)
+        }
         <WalletForm />
         { this.makeTable() }
       </div>
@@ -114,10 +118,12 @@ class Wallet extends React.Component {
 Wallet.propTypes = {
   expenses: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   dispatch: PropTypes.func.isRequired,
+  editor: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (globalState) => ({
   expenses: globalState.wallet.expenses,
+  editor: globalState.wallet.editor,
 });
 
 export default connect(mapStateToProps)(Wallet);

@@ -33,8 +33,7 @@ class WalletForm extends Component {
   }
 
   handleChange({ target }) {
-    const { name } = target;
-    const value = target.type === 'checkbox' ? target.checked : target.value;
+    const { name, value } = target;
 
     this.setState({
       [name]: value,
@@ -100,7 +99,6 @@ class WalletForm extends Component {
   render() {
     const { currencies, editor } = this.props;
     const { value, description, currency, method, tag } = this.state;
-    const renderCurrencies = currencies;
     return (
       <form>
         <label htmlFor="value-input">
@@ -137,7 +135,7 @@ class WalletForm extends Component {
             onChange={ this.handleChange }
             value={ currency }
           >
-            { renderCurrencies.map((element, index) => (
+            { currencies.map((element, index) => (
               element !== 'USDT'
                 ? <option key={ index }>{element}</option>
                 : null
@@ -190,6 +188,7 @@ class WalletForm extends Component {
               <button
                 type="button"
                 onClick={ this.handleUpdateExpense }
+                data-testid="btn-editar-despesa"
               >
                 Editar despesa
               </button>

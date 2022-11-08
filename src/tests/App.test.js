@@ -14,6 +14,7 @@ import {
   stdCurrency,
 } from './helpers/constantes';
 import mockData from './helpers/mockData';
+import Wallet from '../pages/Wallet';
 
 const currencyTestId = 'currency-input';
 const methodTestId = 'method-input';
@@ -306,18 +307,111 @@ describe('Página de carteira', () => {
     const expensePrice = await screen.findAllByText('47.53');
     expect(expensePrice[0]).toBeInTheDocument();
 
-    const deleteBtn = screen.getByRole('button', { name: 'Excluir' });
+    userEvent.type(inputValue, '5');
+    userEvent.type(inputDescription, 'academia');
+    userEvent.selectOptions(inputMoeda, ['CAD']);
+    userEvent.selectOptions(inputMetodo, ['Dinheiro']);
+    userEvent.selectOptions(inputTag, 'Saúde');
+    userEvent.click(adicionarBtn);
 
-    userEvent.click(deleteBtn);
+    const expensePrice2 = await screen.findAllByText('18.78');
+    expect(expensePrice2[0]).toBeInTheDocument();
 
-    const table = screen.getByRole('table');
+    const deleteBtn = screen.getAllByRole('button', { name: 'Excluir' });
 
-    expect(table).not.toHaveTextContent(Value);
-    expect(table).not.toHaveTextContent(stdDescription);
-    expect(table).not.toHaveTextContent(selectedCurrency);
-    expect(table).not.toHaveTextContent(selectedMethod);
-    expect(table).not.toHaveTextContent(stdTag);
-    expect(table).not.toHaveTextContent(exchangeValue);
-    expect(table).not.toHaveTextContent('Dólar Americano/Real Brasileiro');
+    userEvent.click(deleteBtn[0]);
+
+    const tableRows = screen.getAllByRole('row');
+
+    expect(tableRows[1]).not.toHaveTextContent(Value);
+    expect(tableRows[1]).not.toHaveTextContent(stdDescription);
+    expect(tableRows[1]).not.toHaveTextContent(selectedCurrency);
+    expect(tableRows[1]).not.toHaveTextContent(selectedMethod);
+    expect(tableRows[1]).not.toHaveTextContent(stdTag);
+    expect(tableRows[1]).not.toHaveTextContent(exchangeValue);
+    expect(tableRows[1]).not.toHaveTextContent('Dólar Americano/Real Brasileiro');
+
+    expect(tableRows[1]).toHaveTextContent('5');
+    expect(tableRows[1]).toHaveTextContent('academia');
+    expect(tableRows[1]).toHaveTextContent('CAD');
+    expect(tableRows[1]).toHaveTextContent('Dinheiro');
+    expect(tableRows[1]).toHaveTextContent('Saúde');
+    expect(tableRows[1]).toHaveTextContent('3.76');
+    expect(tableRows[1]).toHaveTextContent('Dólar Canadense/Real Brasileiro');
+  });
+
+  test('8- Testa se o botão editar funciona corretamente', async () => {
+    jest.resetAllMocks();
+    const dataArray = Object.values(mockData);
+    const currency = dataArray.map((coin) => coin.code);
+    const editDescription = 'Viajem para praia';
+
+    const newArray = [{
+      id: 0,
+      value: '10',
+      description: 'cinema',
+      currency: 'USD',
+      method: 'Dinheiro',
+      tag: 'Lazer',
+      exchangeRates: mockData,
+    },
+    {
+      id: 1,
+      value: '20',
+      description: 'hamburger',
+      currency: 'CAD',
+      method: 'Cartão de débito',
+      tag: 'Alimentação',
+      exchangeRates: mockData,
+    }];
+
+    const state = {
+      wallet: {
+        currencies: currency,
+        expenses: newArray,
+        editor: false,
+        idToEdit: 0,
+      },
+    };
+
+    jest.spyOn(global, 'fetch').mockResolvedValue({
+      json: jest.fn().mockResolvedValue(mockData),
+    });
+
+    renderWithRouterAndRedux(<Wallet />, { initialState: state });
+
+    const buttonEditar = await screen.findAllByTestId('edit-btn');
+    expect(buttonEditar[0]).toBeInTheDocument();
+    userEvent.click(buttonEditar[0]);
+
+    const editarDespesaBtn = screen.getByTestId('btn-editar-despesa');
+    expect(editarDespesaBtn).toBeInTheDocument();
+
+    const inputValue = screen.getByTestId('value-input');
+    expect(inputValue.value).toBe('10');
+    userEvent.clear(inputValue);
+    userEvent.type(inputValue, '5');
+    expect(inputValue.value).toBe('5');
+
+    const inputDescricao = screen.getByTestId('description-input');
+    expect(inputDescricao.value).toBe('cinema');
+    userEvent.clear(inputDescricao);
+    userEvent.type(inputDescricao, editDescription);
+    expect(inputDescricao.value).toBe(editDescription);
+
+    userEvent.click(editarDespesaBtn);
+
+    const textValue = screen.getByText('5.00');
+    expect(textValue).toBeInTheDocument();
+
+    const textDescription = screen.getByText(editDescription);
+    expect(textDescription).toBeInTheDocument();
+
+    const tableRows = screen.getAllByRole('row');
+
+    expect(tableRows[1]).toHaveTextContent(editDescription);
+    expect(tableRows[2]).toHaveTextContent('hamburger');
+
+    jest.resetAllMocks();
   });
 });
